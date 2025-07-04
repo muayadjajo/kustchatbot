@@ -58,10 +58,10 @@ st.caption("Ask questions about the book you loaded in Colab.")
 
 # Load book content from file saved by Colab
 try:
-    with open("/content/book.txt", "r", encoding="utf-8") as f:
+    with open("book.txt", "r", encoding="utf-8") as f:
         book_content = f.read()
         st.session_state.book_content = book_content
-    st.success("✅ Book loaded from /content/book.txt")
+    st.success("✅ Book loaded from book.txt")
     with st.expander("📖 Show Book Content"):
         st.text_area("Book Content", book_content, height=300)
 except FileNotFoundError:
