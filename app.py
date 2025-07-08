@@ -8,7 +8,7 @@ def ask_openrouter(question, context):
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
-        "Referer": "http://localhost",  # Correct header
+        "Referer": "https://kustchatbot-ltnmhsnxyvylihsdxut2ud.streamlit.app",  # Correct header
         "X-Title": "Colab Book Chatbot"
     }
 
