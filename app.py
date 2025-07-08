@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
-
-API_KEY = "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"  # Replace with your actual key
+import streamlit as st
+API_KEY=st.secrets["OPENROUTER_API_KEY"]   # Replace with your actual key
 
 def ask_openrouter(question, context):
     url = "https://openrouter.ai/api/v1/chat/completions"
