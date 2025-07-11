@@ -78,9 +78,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 with col2:
-    st.image("KUSTLogo.png", width=80)  # Replace with your filename and size
+    st.image("KUSTLogo.png", width=200)  # Replace with your filename and size
 
-st.caption("Ask questions about the book you loaded in Colab.")
+st.caption("How can I help you with your academic plan?")
 
 # Load book content from file saved by Colab
 try:
