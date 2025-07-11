@@ -66,7 +66,7 @@ st.markdown(
 )
 
 # Use columns to align title on the left and logo on the right
-col1, col2 = st.columns([8, 1])  # Adjust width ratio as needed
+col1, col2 = st.columns([6, 2])  # Adjust width ratio as needed
 
 with col1:
     st.markdown("""
