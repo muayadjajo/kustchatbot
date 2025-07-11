@@ -70,7 +70,7 @@ col1, col2 = st.columns([6, 2])  # Adjust width ratio as needed
 
 with col1:
     st.markdown("""
-    <h2 style='color: #FFCE44;'>KUSTBOT</h2>
+    <h1 style='color: #FFCE44;'>KUSTBOT</h1>
 """, unsafe_allow_html=True) 
 
 st.markdown("""
