@@ -58,7 +58,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-color: #1A335E; /* Replace with your hex code */
+        background-color: #000000; /* Replace with your hex code */
     }
     </style>
     """,
@@ -74,7 +74,7 @@ with col1:
 """, unsafe_allow_html=True) 
 
 st.markdown("""
-    <p style='color: #FFCE44;'>YOUR ULTIMATE ACADEMIC ADVISOR</p>
+    <p style='color: #FFFFFF;'>YOUR ULTIMATE ACADEMIC ADVISOR</p>
 """, unsafe_allow_html=True)
 
 with col2:
