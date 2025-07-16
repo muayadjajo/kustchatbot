@@ -61,7 +61,7 @@ st.markdown("""
     <style>
     /* Background color */
     .stApp {
-        background-color: #1A335E;
+        background-color: ##000000;
     }
 
     /* Global text */
@@ -76,6 +76,14 @@ st.markdown("""
 
     /* Labels & input text */
     label, input, textarea, .stTextInput > div > div > input {
+        color: white !important;
+    }
+    .stMarkdown p {
+    color: white !important;
+    }
+    
+    /* Force all captions to be white */
+    .stCaption {
         color: white !important;
     }
 
