@@ -143,6 +143,7 @@ except FileNotFoundError:
     if submitted and question:
         with st.spinner("Processing..."):
             answer = ask_openrouter(question, st.session_state.book_content)
+        st.markdown(f"**Answer:** {response}")
     
         # Save to history
         st.session_state.chat_history.append({"question": question, "answer": answer})
