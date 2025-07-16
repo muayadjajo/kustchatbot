@@ -10,7 +10,7 @@ def ask_openrouter(question, context):
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
-        "Referer": "https://kustchatbot-ltnmhsnxyvylihsdxut2ud.streamlit.app",  # <-- your deployed app URL
+        "Referer": "https://kustchatbot-ltnmhsnxyvylihsdxut2ud.streamlit.app",
         "X-Title": "KUSTBOT Chat"
     }
 
@@ -56,38 +56,33 @@ QUESTION: {question}
 # ✅ --- Streamlit App Config ---
 st.set_page_config(page_title="📘 KUSTBOT")
 
-# ✅ --- Global CSS for background + fonts + white text ---
+# ✅ --- Global CSS for dark theme and white text ---
 st.markdown("""
     <style>
-    /* Background color */
     .stApp {
         background-color: #000000;
     }
 
-    /* Global text */
     html, body, [class*="css"] {
         color: white;
     }
 
-    /* Headings - your h1 stays gold with inline style */
     h2, h3, h4, h5, h6 {
         color: white;
     }
 
-    /* Labels & input text */
     label, input, textarea, .stTextInput > div > div > input {
         color: white !important;
     }
+
     .stMarkdown p {
-    color: white !important;
-    }
-    
-    /* Force all captions to be white */
-    .stCaption {
-        color: white;
+        color: white !important;
     }
 
-    /* Spinner text, if any */
+    .stCaption {
+        color: white !important;
+    }
+
     .stSpinner {
         color: white;
     }
@@ -101,13 +96,12 @@ with col1:
     st.markdown("""
         <h1 style='color: #FFCE44; margin-bottom: 0;'>KUSTBOT</h1>
     """, unsafe_allow_html=True)
-
     st.markdown("""
         <p style='color: white; margin-top: 5px;'>YOUR ULTIMATE ACADEMIC ADVISOR</p>
     """, unsafe_allow_html=True)
 
 with col2:
-    st.image("KUSTLogo.png", width=200)  # Replace with your logo file name
+    st.image("KUSTLogo.png", width=200)
 
 # ✅ Caption under header
 st.caption("How can I help you with your academic plan?")
@@ -120,40 +114,27 @@ try:
 except FileNotFoundError:
     st.error("❌ No book.txt found. Please add it to your project folder!")
 
-# # ✅ --- Question form ---
-# if "book_content" in st.session_state:
-#     with st.form("question_form"):
-#         question = st.text_input("Your question")
-#         submitted = st.form_submit_button("Ask")
+# ✅ --- Initialize chat history ---
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-#     if submitted and question:
-#         with st.spinner("Processing ..."):
-#             response = ask_openrouter(question, st.session_state.book_content)
-#         st.markdown(f"**Answer:** {response}")
-
-    # 1️⃣ Initialize chat history
-    if "chat_history" not in st.session_state:
-        st.session_state.chat_history = []
-    
-    # 2️⃣ Question input
+# ✅ --- Question form ---
+if "book_content" in st.session_state:
     with st.form("question_form"):
         question = st.text_input("Your question")
         submitted = st.form_submit_button("Ask")
-    
+
     if submitted and question:
-        with st.spinner("Processing..."):
+        with st.spinner("Processing ..."):
             answer = ask_openrouter(question, st.session_state.book_content)
-        st.markdown(f"**Answer:** {response}")
-    
-        # Save to history
+
+        # Save Q&A pair to chat history
         st.session_state.chat_history.append({"question": question, "answer": answer})
-    
-    # 3️⃣ Show the conversation
-    if st.session_state.chat_history:
-        st.markdown("### 📚 Conversation History")
-        for chat in st.session_state.chat_history:
-            st.markdown(f"**You:** {chat['question']}")
-            st.markdown(f"**Bot:** {chat['answer']}")
-            st.markdown("---")
 
-
+# ✅ --- Display chat history ---
+if st.session_state.chat_history:
+    st.markdown("### 📚 Conversation History")
+    for chat in st.session_state.chat_history:
+        st.markdown(f"<p style='color: white'><b>You:</b> {chat['question']}</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='color: white'><b>KUSTBOT:</b> {chat['answer']}</p>", unsafe_allow_html=True)
+        st.markdown("---")
