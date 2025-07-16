@@ -87,8 +87,6 @@ st.markdown("""
         color: white;
     }
 
-  
-
     /* Spinner text, if any */
     .stSpinner {
         color: white;
@@ -122,14 +120,39 @@ try:
 except FileNotFoundError:
     st.error("❌ No book.txt found. Please add it to your project folder!")
 
-# ✅ --- Question form ---
-if "book_content" in st.session_state:
+# # ✅ --- Question form ---
+# if "book_content" in st.session_state:
+#     with st.form("question_form"):
+#         question = st.text_input("Your question")
+#         submitted = st.form_submit_button("Ask")
+
+#     if submitted and question:
+#         with st.spinner("Processing ..."):
+#             response = ask_openrouter(question, st.session_state.book_content)
+#         st.markdown(f"**Answer:** {response}")
+
+    # 1️⃣ Initialize chat history
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
+    
+    # 2️⃣ Question input
     with st.form("question_form"):
         question = st.text_input("Your question")
         submitted = st.form_submit_button("Ask")
-
+    
     if submitted and question:
-        with st.spinner("Processing ..."):
-            response = ask_openrouter(question, st.session_state.book_content)
-        st.markdown(f"**Answer:** {response}")
+        with st.spinner("Processing..."):
+            answer = ask_openrouter(question, st.session_state.book_content)
+    
+        # Save to history
+        st.session_state.chat_history.append({"question": question, "answer": answer})
+    
+    # 3️⃣ Show the conversation
+    if st.session_state.chat_history:
+        st.markdown("### 📚 Conversation History")
+        for chat in st.session_state.chat_history:
+            st.markdown(f"**You:** {chat['question']}")
+            st.markdown(f"**Bot:** {chat['answer']}")
+            st.markdown("---")
+
 
