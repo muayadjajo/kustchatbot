@@ -75,11 +75,18 @@ with col1:
 
 st.markdown("""
     <p style='color: #FFFFFF;'>YOUR ULTIMATE ACADEMIC ADVISOR</p>
+    
 """, unsafe_allow_html=True)
 
 with col2:
     st.image("KUSTLogo.png", width=200)  # Replace with your filename and size
-
+st.markdown("""
+    <style>
+    .stCaption {
+        color: white;
+    }
+    </style>
+""", unsafe_allow_html=True)
 st.caption("How can I help you with your academic plan?")
 
 # Load book content from file saved by Colab
