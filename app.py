@@ -84,13 +84,10 @@ st.markdown("""
     
     /* Force all captions to be white */
     .stCaption {
-        color: white !important;
-    }
-
-    /* Captions */
-    .stCaption {
         color: white;
     }
+
+  
 
     /* Spinner text, if any */
     .stSpinner {
