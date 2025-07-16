@@ -1,19 +1,21 @@
 import streamlit as st
 import requests
-import streamlit as st
-API_KEY=st.secrets["OPENROUTER_API_KEY"]   # Replace with your actual key
 
+# ✅ Get API key safely from secrets
+API_KEY = st.secrets["OPENROUTER_API_KEY"]
+
+# ✅ Function to call OpenRouter
 def ask_openrouter(question, context):
     url = "https://openrouter.ai/api/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json",
-        # "Referer": "https://kustchatbot-ltnmhsnxyvylihsdxut2ud.streamlit.app",  # Correct header
-        "X-Title": "Colab Book Chatbot"
+        "Referer": "https://kustchatbot-ltnmhsnxyvylihsdxut2ud.streamlit.app",  # <-- your deployed app URL
+        "X-Title": "KUSTBOT Chat"
     }
 
     data = {
-        "model": "deepseek/deepseek-r1-0528-qwen3-8b:free",  # or your model
+        "model": "deepseek/deepseek-r1-0528-qwen3-8b:free",
         "messages": [{
             "role": "user",
             "content": f"""You are a helpful assistant. Answer the following question using only the provided BOOK content.
@@ -51,59 +53,78 @@ QUESTION: {question}
         else:
             return f"Error {r.status_code}: {r.text}"
 
-# --- Streamlit Interface ---
-st.set_page_config(page_title="📘 Book Chatbot")
-# the code block below defines the interface bg color
-st.markdown(
-    """
+# ✅ --- Streamlit App Config ---
+st.set_page_config(page_title="📘 KUSTBOT")
+
+# ✅ --- Global CSS for background + fonts + white text ---
+st.markdown("""
     <style>
+    /* Background color */
     .stApp {
-        background-color: #000000; /* Replace with your hex code */
+        background-color: #1A335E;
     }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
-# Use columns to align title on the left and logo on the right
-col1, col2 = st.columns([6, 2])  # Adjust width ratio as needed
+    /* Global text */
+    html, body, [class*="css"] {
+        color: white;
+    }
 
-with col1:
-    st.markdown("""
-    <h1 style='color: #FFCE44;'>KUSTBOT</h1>
-""", unsafe_allow_html=True) 
+    /* Headings - your h1 stays gold with inline style */
+    h2, h3, h4, h5, h6 {
+        color: white;
+    }
 
-st.markdown("""
-    <p style='color: #FFFFFF;'>YOUR ULTIMATE ACADEMIC ADVISOR</p>
-    
-""", unsafe_allow_html=True)
+    /* Labels & input text */
+    label, input, textarea, .stTextInput > div > div > input {
+        color: white !important;
+    }
 
-with col2:
-    st.image("KUSTLogo.png", width=200)  # Replace with your filename and size
-st.markdown("""
-    <style>
+    /* Captions */
     .stCaption {
+        color: white;
+    }
+
+    /* Spinner text, if any */
+    .stSpinner {
         color: white;
     }
     </style>
 """, unsafe_allow_html=True)
+
+# ✅ --- Header with title and logo ---
+col1, col2 = st.columns([6, 2])
+
+with col1:
+    st.markdown("""
+        <h1 style='color: #FFCE44; margin-bottom: 0;'>KUSTBOT</h1>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+        <p style='color: white; margin-top: 5px;'>YOUR ULTIMATE ACADEMIC ADVISOR</p>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.image("KUSTLogo.png", width=200)  # Replace with your logo file name
+
+# ✅ Caption under header
 st.caption("How can I help you with your academic plan?")
 
-# Load book content from file saved by Colab
+# ✅ --- Load book content ---
 try:
     with open("book.txt", "r", encoding="utf-8") as f:
         book_content = f.read()
         st.session_state.book_content = book_content
-    # st.success("✅ Book loaded from book.txt") # This line ensures the book is loaded
-    # with st.expander("📖 Show Book Content"): # this line displays book content
-    #     st.text_area("Book Content", book_content, height=300) # specifies size of the displayed content
 except FileNotFoundError:
-    st.error("❌ No /content/book.txt found. Please run your extract_text_from_pdf() and save book.txt first.")
+    st.error("❌ No book.txt found. Please add it to your project folder!")
 
-# Ask a question
+# ✅ --- Question form ---
 if "book_content" in st.session_state:
-    question = st.text_input("Your question")
-    if question:
+    with st.form("question_form"):
+        question = st.text_input("Your question")
+        submitted = st.form_submit_button("Ask")
+
+    if submitted and question:
         with st.spinner("Processing ..."):
             response = ask_openrouter(question, st.session_state.book_content)
         st.markdown(f"**Answer:** {response}")
+
