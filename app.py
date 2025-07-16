@@ -61,7 +61,7 @@ st.markdown("""
     <style>
     /* Background color */
     .stApp {
-        background-color: ##000000;
+        background-color: #000000;
     }
 
     /* Global text */
