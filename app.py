@@ -74,9 +74,6 @@ st.markdown("""
     label, textarea, {
         color: white !important;
     }
-    div[data-testid="stTextInputLabel"] {
-    color: white !important;
-}
 
     .stMarkdown p {
         color: white !important;
@@ -128,10 +125,13 @@ except FileNotFoundError:
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
+# Custom white label using markdown
+st.markdown("<div style='color: white; font-weight: 600; font-size: 16px;'>Your question</div>", unsafe_allow_html=True)
+
 # ✅ --- Question form ---
 if "book_content" in st.session_state:
     with st.form("question_form"):
-        question = st.text_input("Your question")
+        question = st.text_input(label="", key="question_input")
         submitted = st.form_submit_button("Ask")
 
     if submitted and question:
