@@ -79,7 +79,7 @@ st.markdown("""
         color: white !important;
     }
 
-    .stCaption {
+    div[data-testid="stCaptionContainer"] {
         color: white !important;
     }
     input{
