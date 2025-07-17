@@ -126,7 +126,7 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # Custom white label using markdown
-st.markdown("<div style='color: white; font-weight: 600; font-size: 16px;'>Your question</div>", unsafe_allow_html=True)
+st.markdown("<div style='color: white; font-weight: 600; font-size: 10px;'>Your question</div>", unsafe_allow_html=True)
 
 # ✅ --- Question form ---
 if "book_content" in st.session_state:
