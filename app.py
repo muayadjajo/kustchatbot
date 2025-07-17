@@ -71,7 +71,7 @@ st.markdown("""
         color: white;
     }
 
-    label, input, textarea, .stTextInput > div > div > input {
+    label, textarea, {
         color: white !important;
     }
 
