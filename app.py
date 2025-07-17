@@ -107,7 +107,11 @@ with col2:
     st.image("KUSTLogo.png", width=200)
 
 # ✅ Caption under header
-st.caption("How can I help you with your academic plan?")
+st.markdown("""
+    <p style='color: white; font-size: 0.875rem; opacity: 0.8; margin-top: -10px;'>
+        How can I help you with your academic plan?
+    </p>
+""", unsafe_allow_html=True)
 
 # ✅ --- Load book content ---
 try:
