@@ -74,6 +74,9 @@ st.markdown("""
     label, textarea, {
         color: white !important;
     }
+    div[data-testid="stTextInputLabel"] {
+    color: white !important;
+}
 
     .stMarkdown p {
         color: white !important;
