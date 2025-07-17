@@ -82,9 +82,8 @@ st.markdown("""
     .stCaption {
         color: white !important;
     }
-    input, textarea {
-        color: black !important;
-        background-color: white !important;  /* Optional: to make sure the background is white */
+    input{
+        color: black;
     }
 
     .stSpinner {
