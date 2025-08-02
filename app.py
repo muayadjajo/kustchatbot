@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 import os
+import base64
+import json
 
 # ✅ Get API key safely from secrets
 API_KEY = st.secrets["OPENROUTER_API_KEY"]
@@ -67,6 +69,54 @@ def save_to_excel(question, answer, filename="chat_history.xlsx"):
         updated_df = new_df
 
     updated_df.to_excel(filename, index=False)
+
+
+
+#push excel to github
+def push_to_github(filename="chat_history.xlsx"):
+    if not os.path.exists(filename):
+        return "❌ Excel file not found."
+
+    # Load file content and encode to base64
+    with open(filename, "rb") as f:
+        content = base64.b64encode(f.read()).decode("utf-8")
+
+    # GitHub setup
+    token = st.secrets["GITHUB_TOKEN"]
+    repo = st.secrets["GITHUB_REPO"]  # e.g., "yourusername/kustbot-chat-history"
+    branch = st.secrets.get("GITHUB_BRANCH", "main")
+    path = f"chat_logs/{filename}"  # Target path in repo
+
+    api_url = f"https://api.github.com/repos/{repo}/contents/{path}"
+
+    # Check if file exists (to update instead of create)
+    headers = {"Authorization": f"Bearer {token}"}
+    r = requests.get(api_url, headers=headers, params={"ref": branch})
+    
+    if r.status_code == 200:
+        sha = r.json()["sha"]
+        message = "Update chat history"
+    else:
+        sha = None
+        message = "Create chat history"
+
+    data = {
+        "message": message,
+        "branch": branch,
+        "content": content,
+    }
+
+    if sha:
+        data["sha"] = sha
+
+    # Push file
+    push_response = requests.put(api_url, headers=headers, data=json.dumps(data))
+
+    if push_response.status_code in [200, 201]:
+        return f"✅ Excel file pushed to GitHub: [chat_logs/{filename}](https://github.com/{repo}/blob/{branch}/chat_logs/{filename})"
+    else:
+        return f"❌ GitHub push failed: {push_response.status_code} — {push_response.text}"
+
 
 # ✅ --- Streamlit App Config ---
 st.set_page_config(page_title="📘 KUSTBOT")
@@ -154,6 +204,9 @@ if "book_content" in st.session_state:
         # ✅ Save to session and Excel
         st.session_state.chat_history.append({"question": question, "answer": answer})
         save_to_excel(question, answer)
+        push_result = push_to_github()
+        st.info(push_result)
+
 
 # ✅ --- Display chat history ---
 if st.session_state.chat_history:
