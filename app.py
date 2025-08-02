@@ -1,5 +1,7 @@
 import streamlit as st
 import requests
+import pandas as pd
+import os
 
 # ✅ Get API key safely from secrets
 API_KEY = st.secrets["OPENROUTER_API_KEY"]
@@ -52,8 +54,8 @@ QUESTION: {question}
             return f"API Error {r.status_code}: {response_json['error']}"
         else:
             return f"Error {r.status_code}: {r.text}"
-            
-#save questions and answers in excel
+
+# ✅ Save questions and answers to Excel
 def save_to_excel(question, answer, filename="chat_history.xlsx"):
     data = {"Question": [question], "Answer": [answer]}
     new_df = pd.DataFrame(data)
@@ -66,7 +68,6 @@ def save_to_excel(question, answer, filename="chat_history.xlsx"):
 
     updated_df.to_excel(filename, index=False)
 
-
 # ✅ --- Streamlit App Config ---
 st.set_page_config(page_title="📘 KUSTBOT")
 
@@ -78,14 +79,10 @@ st.markdown("""
     }
 
     html, body, [class*="css"] {
-        color: white;
+        color: white !important;
     }
 
-    h2, h3, h4, h5, h6 {
-        color: white;
-    }
-
-    label, textarea, {
+    h2, h3, h4, h5, h6, label, textarea {
         color: white !important;
     }
 
@@ -96,8 +93,10 @@ st.markdown("""
     div[data-testid="stCaptionContainer"] {
         color: white !important;
     }
-    input{
-        color: black;
+
+    input {
+        color: white !important;
+        background-color: #222222 !important;
     }
 
     .stSpinner {
@@ -139,7 +138,7 @@ except FileNotFoundError:
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Custom white label using markdown
+# ✅ Custom white label
 st.markdown("<div style='color: white; font-weight: 400; font-size: 16px;'>Your question</div>", unsafe_allow_html=True)
 
 # ✅ --- Question form ---
@@ -152,9 +151,8 @@ if "book_content" in st.session_state:
         with st.spinner("Processing ..."):
             answer = ask_openrouter(question, st.session_state.book_content)
 
-        # Save Q&A pair to chat history
+        # ✅ Save to session and Excel
         st.session_state.chat_history.append({"question": question, "answer": answer})
-        # ✅ Save the chat to Excel
         save_to_excel(question, answer)
 
 # ✅ --- Display chat history ---
@@ -163,4 +161,4 @@ if st.session_state.chat_history:
     for chat in st.session_state.chat_history:
         st.markdown(f"<p style='color: white'><b>You:</b> {chat['question']}</p>", unsafe_allow_html=True)
         st.markdown(f"<p style='color: white'><b>KUSTBOT:</b> {chat['answer']}</p>", unsafe_allow_html=True)
-        st.markdown("---")
+        st.markdown("<hr style='border: 0.5px solid #444;'>", unsafe_allow_html=True)
