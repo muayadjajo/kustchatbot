@@ -3,5 +3,3 @@ pandas
 requests
 openpyxl
 pymupdf
-json
-
