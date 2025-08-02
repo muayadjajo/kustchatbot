@@ -52,6 +52,20 @@ QUESTION: {question}
             return f"API Error {r.status_code}: {response_json['error']}"
         else:
             return f"Error {r.status_code}: {r.text}"
+            
+#save questions and answers in excel
+def save_to_excel(question, answer, filename="chat_history.xlsx"):
+    data = {"Question": [question], "Answer": [answer]}
+    new_df = pd.DataFrame(data)
+
+    if os.path.exists(filename):
+        existing_df = pd.read_excel(filename)
+        updated_df = pd.concat([existing_df, new_df], ignore_index=True)
+    else:
+        updated_df = new_df
+
+    updated_df.to_excel(filename, index=False)
+
 
 # ✅ --- Streamlit App Config ---
 st.set_page_config(page_title="📘 KUSTBOT")
@@ -140,6 +154,8 @@ if "book_content" in st.session_state:
 
         # Save Q&A pair to chat history
         st.session_state.chat_history.append({"question": question, "answer": answer})
+        # ✅ Save the chat to Excel
+        save_to_excel(question, answer)
 
 # ✅ --- Display chat history ---
 if st.session_state.chat_history:
