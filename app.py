@@ -23,6 +23,12 @@ def ask_openrouter(question, context):
         "messages": [{
             "role": "user",
             "content": f"""You are a helpful assistant. Answer the following question using only the provided BOOK content.
+
+- If the answer is not directly found in the BOOK, say: "Consult your department for details about this question."
+- Do NOT use your own knowledge.
+- Do NOT make assumptions.
+- Do NOT explain anything.
+- Only output the answer found in the BOOK.
 - Your answer must be short, clear, and in one or two sentences.
 - Do NOT explain your reasoning.
 - Do NOT show your thinking.
@@ -36,7 +42,7 @@ BOOK:
 QUESTION: {question}
 """
         }],
-        "temperature": 0.2
+        "temperature": 0.0
     }
 
     r = requests.post(url, headers=headers, json=data)
@@ -205,8 +211,10 @@ if "book_content" in st.session_state:
         st.session_state.chat_history.append({"question": question, "answer": answer})
         save_to_excel(question, answer)
         push_result = push_to_github()
-        st.info(push_result)
-
+        
+        # the following line of code is meant to show in the interface (UI) that the answer has been exported to Excel
+        #st.info(push_result)
+        
 
 # ✅ --- Display chat history ---
 if st.session_state.chat_history:
